@@ -1,11 +1,22 @@
 package com.bridgelabz;
 import java.util.Random;
 import java.util.Scanner;
+
 //uc-1
 public class TicTacToeGame {
     static char[][] board = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
     public static char chooseLetter;
+    public static void main(String[] args) {
+        System.out.println("Welcome to TicTacToe Game");
+        chooseLetter();
+        printBoard(board);
 
+        playerTurn(board);
+        printBoard(board);
+        computerTurn(board);
+
+        printBoard(board);
+    }
     //uc-2
     public static void chooseLetter() {
         Scanner scanner = new Scanner(System.in);
@@ -95,19 +106,6 @@ public class TicTacToeGame {
                 return false;
         }
     }
-
-    public static void main(String[] args) {
-        System.out.println("Welcome to TicTacToe Game");
-        chooseLetter();
-        printBoard(board);
-
-        playerTurn(board);
-        printBoard(board);
-        computerTurn(board);
-
-        printBoard(board);
-    }
-
     private static void computerTurn(char[][]board) {
         Random rand = new Random();
         int computerMove;
