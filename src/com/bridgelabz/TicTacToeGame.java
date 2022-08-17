@@ -4,11 +4,16 @@ import java.util.Scanner;
 
 //uc-1
 public class TicTacToeGame {
+    private enum WiNNER {
+        playerTurn, computerTurn
+    }
     static char[][] board = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
     public static char chooseLetter;
+
     public static void main(String[] args) {
         System.out.println("Welcome to TicTacToe Game");
         chooseLetter();
+        getWinner();
         printBoard(board);
 
         playerTurn(board);
@@ -17,6 +22,7 @@ public class TicTacToeGame {
 
         printBoard(board);
     }
+
     //uc-2
     public static void chooseLetter() {
         Scanner scanner = new Scanner(System.in);
@@ -37,17 +43,17 @@ public class TicTacToeGame {
     }
 
     //uc-4
-    private static void playerTurn(char[][]board) {
-        Scanner scanner= new Scanner(System.in);
+    private static void playerTurn(char[][] board) {
+        Scanner scanner = new Scanner(System.in);
 
         System.out.println(" choose a number (1 to 9) : ");
         String userInput = scanner.nextLine();
 
-        placeMove(board,userInput,'X');
+        placeMove(board, userInput, 'X');
         scanner.close();
     }
 
-    private static void placeMove(char[][] board,String position,char symbol) {
+    private static void placeMove(char[][] board, String position, char symbol) {
         switch (position) {
             case "1":
                 board[0][0] = symbol;
@@ -106,7 +112,8 @@ public class TicTacToeGame {
                 return false;
         }
     }
-    private static void computerTurn(char[][]board) {
+
+    private static void computerTurn(char[][] board) {
         Random rand = new Random();
         int computerMove;
         while (true) {
@@ -116,7 +123,16 @@ public class TicTacToeGame {
             }
         }
         System.out.println("computer choose " + computerMove);
-        placeMove(board,Integer.toString(computerMove),'O');
+        placeMove(board, Integer.toString(computerMove), 'O');
+    }
+//uc-6
+    public static WiNNER getWinner() {
+        if (((int) Math.random() * 10 % 2) == 0) {
+            System.out.println("User won the toss");
+            return WiNNER.playerTurn;
+        } else {
+            System.out.println("Computer won the toss");
+            return WiNNER.computerTurn;
+        }
     }
 }
-
