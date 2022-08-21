@@ -7,20 +7,74 @@ public class TicTacToeGame {
     private enum WiNNER {
         playerTurn, computerTurn
     }
-    static char[][] board = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
-    public static char chooseLetter;
+    public static void main(String[] args){
+        Scanner restart = new Scanner(System.in);
+        String playagain;
+        do {
+            System.out.println("Welcome to Tic Tac Toe Game !");
+            Scanner scanner = new Scanner(System.in);
+            char[][] board = {{' ', ' ', ' '}, {' ', ' ', ' '},{' ', ' ', ' '}};
+            printBoard(board);
+            getWinner();
+            while (true) {
+                playerTurn(board, scanner);
+                if (isGameFinished(board)) {
+                    break;
+                }
+                printBoard(board);
+                computerTurn(board);
+                if (isGameFinished(board)) {
+                    break;
+                }
+                printBoard(board);
+            }
+            System.out.println("Play again : 1");
+            System.out.println("exit : 2");
+            playagain = restart.next();
+        }while (playagain.equals("1"));
+    }
+    private static boolean isGameFinished(char[][] board) {
 
-    public static void main(String[] args) {
-        System.out.println("Welcome to TicTacToe Game");
-        chooseLetter();
-        getWinner();
-        printBoard(board);
+        if (hasContestantWon(board, 'X')) {
+            printBoard(board);
+            System.out.println("Player wins!");
+            System.out.println("Congratulations");
+            return true;
+        }
 
-        playerTurn(board);
-        printBoard(board);
-        computerTurn(board);
+        if (hasContestantWon(board, 'O')) {
+            printBoard(board);
+            System.out.println("Computer wins!");
+            System.out.println("You Loss the Game :(");
+            return true;
+        }
 
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == ' ') {
+                    return false;
+                }
+            }
+        }
         printBoard(board);
+        System.out.println("The game ended in a tie!");
+        return true;
+    }
+
+    private static boolean hasContestantWon(char[][] board,char symbol) {
+        if ((board[0][0] == symbol && board[0][1] == symbol && board[0][2] == symbol) ||
+                (board[1][0] == symbol && board[1][1] == symbol && board[1][2] == symbol) ||
+                (board[2][0] == symbol && board[2][1] == symbol && board[2][2] == symbol) ||
+
+                (board[0][0] == symbol && board[1][0] == symbol && board[2][0] == symbol) ||
+                (board[0][1] == symbol && board[1][1] == symbol && board[2][1] == symbol) ||
+                (board[0][2] == symbol && board[1][2] == symbol && board[2][2] == symbol) ||
+
+                (board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol) ||
+                (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol)){
+            return true;
+        }
+        return false;
     }
 
     //uc-2
@@ -43,14 +97,18 @@ public class TicTacToeGame {
     }
 
     //uc-4
-    private static void playerTurn(char[][] board) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println(" choose a number (1 to 9) : ");
-        String userInput = scanner.nextLine();
-
+    private static void playerTurn(char[][] board,Scanner scanner) {
+        String userInput;
+        while (true) {
+            System.out.println(" choose a number (1 to 9) : ");
+            userInput = scanner.nextLine();
+            if(isValidMove(board,Integer.parseInt(userInput))){
+                break;
+            }else{
+                System.out.println(userInput + "is not a valid move");
+            }
+        }
         placeMove(board, userInput, 'X');
-        scanner.close();
     }
 
     private static void placeMove(char[][] board, String position, char symbol) {
