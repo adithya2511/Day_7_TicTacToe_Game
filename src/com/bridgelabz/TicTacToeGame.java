@@ -4,9 +4,6 @@ import java.util.Scanner;
 
 //uc-1
 public class TicTacToeGame {
-    private enum WiNNER {
-        playerTurn, computerTurn
-    }
     public static void main(String[] args){
         Scanner restart = new Scanner(System.in);
         String playagain;
@@ -14,6 +11,8 @@ public class TicTacToeGame {
             System.out.println("Welcome to Tic Tac Toe Game !");
             Scanner scanner = new Scanner(System.in);
             char[][] board = {{' ', ' ', ' '}, {' ', ' ', ' '},{' ', ' ', ' '}};
+            chooseLetter();
+            System.out.println("Empty Board");
             printBoard(board);
             getWinner();
             while (true) {
@@ -33,52 +32,7 @@ public class TicTacToeGame {
             playagain = restart.next();
         }while (playagain.equals("1"));
     }
-    private static boolean isGameFinished(char[][] board) {
-
-        if (hasContestantWon(board, 'X')) {
-            printBoard(board);
-            System.out.println("Player wins!");
-            System.out.println("Congratulations");
-            return true;
-        }
-
-        if (hasContestantWon(board, 'O')) {
-            printBoard(board);
-            System.out.println("Computer wins!");
-            System.out.println("You Loss the Game :(");
-            return true;
-        }
-
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] == ' ') {
-                    return false;
-                }
-            }
-        }
-        printBoard(board);
-        System.out.println("The game ended in a tie!");
-        return true;
-    }
-
-    private static boolean hasContestantWon(char[][] board,char symbol) {
-        if ((board[0][0] == symbol && board[0][1] == symbol && board[0][2] == symbol) ||
-                (board[1][0] == symbol && board[1][1] == symbol && board[1][2] == symbol) ||
-                (board[2][0] == symbol && board[2][1] == symbol && board[2][2] == symbol) ||
-
-                (board[0][0] == symbol && board[1][0] == symbol && board[2][0] == symbol) ||
-                (board[0][1] == symbol && board[1][1] == symbol && board[2][1] == symbol) ||
-                (board[0][2] == symbol && board[1][2] == symbol && board[2][2] == symbol) ||
-
-                (board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol) ||
-                (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol)){
-            return true;
-        }
-        return false;
-    }
-
-    //uc-2
-    public static void chooseLetter() {
+    private static void chooseLetter() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose a letter ( X or O ) : ");
         char playerLetter = scanner.next().toUpperCase().charAt(0);
@@ -86,17 +40,13 @@ public class TicTacToeGame {
         System.out.println("computer choose :");
         System.out.println(computerLetter);
     }
-
-    //uc-3
-    public static void printBoard(char[][] board) {
+    private static void printBoard(char[][] board) {
         System.out.println(board[0][0] + "|" + board[0][1] + "|" + board[0][2]);
         System.out.println("-+-+-");
         System.out.println(board[1][0] + "|" + board[1][1] + "|" + board[1][2]);
         System.out.println("-+-+-");
         System.out.println(board[2][0] + "|" + board[2][1] + "|" + board[2][2]);
     }
-
-    //uc-4
     private static void playerTurn(char[][] board,Scanner scanner) {
         String userInput;
         while (true) {
@@ -110,7 +60,18 @@ public class TicTacToeGame {
         }
         placeMove(board, userInput, 'X');
     }
-
+    private static void computerTurn(char[][] board) {
+        Random rand = new Random();
+        int computerMove;
+        while (true) {
+            computerMove = rand.nextInt(9) + 1;
+            if (isValidMove(board, computerMove)) {
+                break;
+            }
+        }
+        System.out.println("computer choose " + computerMove);
+        placeMove(board, Integer.toString(computerMove), 'O');
+    }
     private static void placeMove(char[][] board, String position, char symbol) {
         switch (position) {
             case "1":
@@ -146,7 +107,7 @@ public class TicTacToeGame {
     }
 
     //uc-5
-    public static boolean isValidMove(char[][] board, int position) {
+    private static boolean isValidMove(char[][] board, int position) {
         switch (position) {
             case 1:
                 return (board[0][0] == ' ');
@@ -170,27 +131,50 @@ public class TicTacToeGame {
                 return false;
         }
     }
+    private static boolean hasContestantWon(char[][] board,char symbol) {
+        if ((board[0][0] == symbol && board[0][1] == symbol && board[0][2] == symbol) ||
+                (board[1][0] == symbol && board[1][1] == symbol && board[1][2] == symbol) ||
+                (board[2][0] == symbol && board[2][1] == symbol && board[2][2] == symbol) ||
 
-    private static void computerTurn(char[][] board) {
-        Random rand = new Random();
-        int computerMove;
-        while (true) {
-            computerMove = rand.nextInt(9) + 1;
-            if (isValidMove(board, computerMove)) {
-                break;
+                (board[0][0] == symbol && board[1][0] == symbol && board[2][0] == symbol) ||
+                (board[0][1] == symbol && board[1][1] == symbol && board[2][1] == symbol) ||
+                (board[0][2] == symbol && board[1][2] == symbol && board[2][2] == symbol) ||
+
+                (board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol) ||
+                (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol)){
+            return true;
+        }
+        return false;
+    }
+    public static boolean isGameFinished(char[][] board) {
+        if (hasContestantWon(board, 'X')) {
+            printBoard(board);
+            System.out.println("Player wins!");
+            System.out.println("Congratulations");
+            return true;
+        }
+        if (hasContestantWon(board, 'O')) {
+            printBoard(board);
+            System.out.println("Computer wins!");
+            System.out.println("You Loss the Game :(");
+            return true;
+        }
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == ' ') {
+                    return false;
+                }
             }
         }
-        System.out.println("computer choose " + computerMove);
-        placeMove(board, Integer.toString(computerMove), 'O');
+        printBoard(board);
+        System.out.println("The game ended in a tie!");
+        return true;
     }
-//uc-6
-    public static WiNNER getWinner() {
+    private static void getWinner() {
         if (((int) Math.random() * 10 % 2) == 0) {
             System.out.println("User won the toss");
-            return WiNNER.playerTurn;
         } else {
             System.out.println("Computer won the toss");
-            return WiNNER.computerTurn;
         }
     }
 }
